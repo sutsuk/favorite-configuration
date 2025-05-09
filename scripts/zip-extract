@@ -1,0 +1,10 @@
+#! /bin/bash
+
+if [ $# -ge 1 ]; then
+  if [ ! -d _trash ]; then
+    mkdir _trash
+  fi
+  7za x $1
+  mv $1 _trash
+fi
+
