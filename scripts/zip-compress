@@ -1,0 +1,32 @@
+#! /bin/bash
+
+if [ ! -d _trash ]; then
+  mkdir _trash
+fi
+packlist=""
+for f in $(ls); do
+  if [ -f $f ]; then
+    ext=$(echo $f | sed 's/.*\.//g')
+    if [ ! "$ext" == "pack" ]; then
+      rmext=$(echo $f | sed 's/\..*//g')
+      echo "mv $f $rmext"
+      mv $f $rmext
+      packlist="$packlist $rmext"
+    fi
+  fi
+done
+echo "packlist: $packlist"
+if [ ! "$packlist" == "" ]; then
+  if [ $# -eq 0 ]; then
+    dst="$(cat /dev/urandom | tr -dc '1-9' | head -c16).pack"
+  else
+    dst=$1
+  fi
+  echo "7za a -tzip -p $dst $packlist"
+  7za a -tzip -p $dst $packlist
+  chmod 600 $dst
+  echo "mv $packlist _trash"
+  mv $packlist _trash
+  sync
+fi
+

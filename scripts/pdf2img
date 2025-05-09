@@ -1,0 +1,14 @@
+#! /bin/bash
+
+if [ ! -d _trash ]; then
+  mkdir _trash
+fi
+if [ $# -ge 1 ]; then
+  src="${1}"
+  basename=$(echo $src | sed 's/\..*//g');
+  dst="${basename}-%03d.jpg"
+  convert -density 500 -quality 100 $src $dst
+  chmod 600 ${basename}*.jpg
+  mv $src _trash
+fi
+

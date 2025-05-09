@@ -1,0 +1,26 @@
+#! /bin/bash
+
+if [ $# -ge 1 ]; then
+  rm -rf _temp && mkdir _temp
+  N=0
+  SRCS=""
+  ORIG=""
+  for f in $(ls $@); do
+    echo "convert $f -density 300 -units pixelsperinch -resize 3840x _temp/$N.jpg"
+    convert -units PixelsPerInch $f -density 300 -resize 3840x _temp/$N.jpg
+    ORIG="${ORIG} $f"
+    SRCS="${SRCS} _temp/$N.jpg"
+    N=$((N + 1))
+  done
+  echo "SRCS: ${SRCS}"
+  n16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
+  convert $SRCS $n16.pdf
+  chmod 600 $n16.pdf
+  if [ ! -d _trash ]; then
+    mkdir _trash
+  fi
+  echo "mv $ORIG _trash"
+  mv $ORIG _trash
+  rm -rf _temp
+fi
+
