@@ -1,0 +1,13 @@
+[core]
+  editor = /usr/bin/vim
+[sequence]
+  editor = /usr/bin/vim
+[user]
+  name = sutsuk
+  email = 107033259+sutsuk@users.noreply.github.com
+[url "github:"]
+  InsteadOf = https://github.com/
+[push]
+  default = current
+[pull]
+  default = current
