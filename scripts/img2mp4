@@ -1,0 +1,7 @@
+#! /bin/bash
+
+if [ $# -ge 1 ]; then
+  n16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
+  ffmpeg -framerate 3 -i "$1" -c:v libx265 -pix_fmt yuv420p -vf scale=3840:-2 -r 30 ${n16}.mp4
+fi
+
