@@ -5,10 +5,10 @@ if [ $# -ge 1 ]; then
   opt=""
   opt="${opt} -err_detect ignore_err"
   opt="${opt} -fflags +discardcorrupt"
-  if [ $# -eq 1 ]; then
-    opt="${opt} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 30"
-  else
+  if [ $# -ge 2 ] && [ "$2" != "" ]; then
     opt="${opt} $2"
+  else
+    opt="${opt} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 30"
   fi
   conf=""
   conf="${conf} -tag:v hvc1 -movflags +faststart"
@@ -20,7 +20,9 @@ if [ $# -ge 1 ]; then
   conf="${conf} -map 0:a:0 -c:a aac -aac_coder twoloop -ac 2 -ar 48000"
   conf="${conf} -map 0:v:0 -map_chapters -1 -map -0:s -map_metadata -1"
   conf="${conf} -fflags +bitexact -flags:v +bitexact -flags:a +bitexact"
-  # conf="${conf} -vf crop=1440:1080"
+  if [ $# -ge 3 ] && [ "$3" != "" ]; then 
+    conf="${conf} -vf crop=$3"
+  fi
   echo "ffmpeg ${opt} -i \"$1\" ${conf} ${n16}.mp4"
   ffmpeg ${opt} -i "$1" ${conf} ${n16}.mp4
   chmod 600 ${n16}.mp4
