@@ -10,6 +10,9 @@ alias ll='ls -l'
 alias rr='rm -rf'
 alias remmina='GDK_BACKEND=x11 remmina'
 alias rm-empty='find ./ -depth -type d -empty -exec rm -v -r {} \;'
+alias bashrc='vim ${HOME}/.bashrc && source ${HOME}/.bashrc'
+alias cputemp='watch -n 1 vcgencmd measure_temp'
+alias sd='sudo shutdown now'
 alias uefi='sudo systemctl reboot --firmware-setup'
 
 if [ $UID -eq 0 ]; then
