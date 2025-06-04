@@ -1,0 +1,82 @@
+#! /bin/bash
+
+# Modify the variables below
+DURATION=5
+AUDIO="sample.mp3"
+SIZE=1920x1080
+# Modify the variables above
+
+OFFSET=$((STEP-1))
+FILTER=("-filter_complex [0][1]xfade=transition=wipeleft:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=wipeup:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=slideleft:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=slideup:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=smoothleft:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=smoothup:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=circlecrop:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=rectcrop:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=circleclose:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=circleopen:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=horzclose:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=horzopen:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=vertclose:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=vertopen:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=hlslice:duration=1:offset=${OFFSET},format=yuv420p"
+        "-filter_complex [0][1]xfade=transition=vuslice:duration=1:offset=${OFFSET},format=yuv420p")
+
+echo > concat_list
+rm -rf _temp && mkdir _temp
+
+N=0
+CUR=""
+for f in $(src/*); do
+  PREV="${CUR}"
+  CUR=$(printf "%016d", $N)
+  convert $f -gravity center -background #000000 -resize $SIZE -extent $SIZE _temp/$CUR.jpg
+  if [ $N -gt 0 ]; then
+    INPUT="-loop 1 -t $STEP -i _temp/${PREV}.jpg -loop 1 -t 1 -i _temp/${CUR}.jpg"
+    RAND=$(tr -dc '0-1' < /dev/random | head -c 4)
+    if [ "$RAND" == "0000" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[0]} _temp/$PREV.mp4
+    elif [ "$RAND" == "0001" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[1]} _temp/$PREV.mp4
+    elif [ "$RAND" == "0010" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[2]} _temp/$PREV.mp4
+    elif [ "$RAND" == "0011" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[3]} _temp/$PREV.mp4
+    elif [ "$RAND" == "0100" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[4]} _temp/$PREV.mp4
+    elif [ "$RAND" == "0101" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[5]} _temp/$PREV.mp4
+    elif [ "$RAND" == "0110" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[6]} _temp/$PREV.mp4
+    elif [ "$RAND" == "0111" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[7]} _temp/$PREV.mp4
+    elif [ "$RAND" == "1000" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[8]} _temp/$PREV.mp4
+    elif [ "$RAND" == "1001" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[9]} _temp/$PREV.mp4
+    elif [ "$RAND" == "1010" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[10]} _temp/$PREV.mp4
+    elif [ "$RAND" == "1011" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[11]} _temp/$PREV.mp4
+    elif [ "$RAND" == "1100" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[12]} _temp/$PREV.mp4
+    elif [ "$RAND" == "1101" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[13]} _temp/$PREV.mp4
+    elif [ "$RAND" == "1110" ]; then
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[14]} _temp/$PREV.mp4
+    else
+      ffmpeg -err_detect ignore_err ${INPUT} ${FILTER[15]} _temp/$PREV.mp4
+    fi;
+    echo "file _temp/$PREV.mp4" >> concat_list
+  fi
+  N=$((N+1))
+done;
+TIMESTAMP=$(date +'%Y%m%d%H%M%S')
+if [ $N -gt 0 ]; then
+  ffmpeg -err_detect ignore_err -loop 1 -t $((STEP-1)) -i _temp/${CUR}.jpg _temp/$CUR.mp4
+  echo "file _temp/$CUR.mp4" >> concat_list
+  ffmpeg -err_detect ignore_err -f concat -i concat_list -c copy _temp/$TIMESTAMP.mp4
+  ffmpeg -err_detect ignore_err -i _temp/$TIMESTAMP.mp4 -i $AUDIO -vcodec libx264 -pix_fmt yuv420p $TIMESTAMP.mp4
+fi
