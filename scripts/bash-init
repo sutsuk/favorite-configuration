@@ -7,7 +7,7 @@ fi
 export PATH="${PATH}:${HOME}/favorite-configuration/scripts/"
 
 alias ll='ls -l'
-alias rr='rm -rf'
+alias rr='rm -vrf'
 alias remmina='GDK_BACKEND=x11 remmina'
 alias rm-empty='find ./ -depth -type d -empty -exec rm -v -r {} \;'
 alias bashrc='vim ${HOME}/.bashrc && source ${HOME}/.bashrc'
