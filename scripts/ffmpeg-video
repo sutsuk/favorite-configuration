@@ -23,7 +23,7 @@ if [ $# -ge 1 ]; then
   conf="${conf} -map 0:v:0 -map_chapters -1 -map -0:s -map_metadata -1"
   conf="${conf} -fflags +bitexact -flags:v +bitexact -flags:a +bitexact"
   if [ $# -ge 4 ] && [ "$4" != "" ]; then 
-    conf="${conf} -vf crop=$3"
+    conf="${conf} -vf crop=$4"
   fi
   echo "ffmpeg ${opt} -i \"$1\" ${conf} ${n16}.mp4"
   ffmpeg ${opt} -i "$1" ${conf} ${n16}.mp4
