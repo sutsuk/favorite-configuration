@@ -22,7 +22,7 @@ if [ ! "$packlist" == "" ]; then
   else
     dst=$1
   fi
-  echo "7za a -tzip -p $dst $packlist"
+  echo "7za a -tzip -mem=AES256 -p $dst $packlist"
   7za a -tzip -mem=AES256 -p $dst $packlist
   chmod 600 $dst
   echo "mv $packlist _trash"
