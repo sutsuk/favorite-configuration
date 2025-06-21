@@ -1,9 +1,26 @@
 #! /bin/bash
 
 if [ $# -ge 1 ]; then
-  n16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
-  echo "ffmpeg -i \"$1\" -q:v 1 ${n16}.jpg"
-  ffmpeg -i "$1" -q:v 1 ${n16}.jpg
-  chmod 600 ${n16}.jpg
+  if [ "$1" = "list" ]; then
+    n13=$(cat /dev/urandom | tr -dc '1-9' | head -c13)
+    urls=()
+    while read url; do
+      if [ "$url" != "" ]; then
+        urls+=($url)
+      fi
+      echo -e "\rurls: ${urls[@]}"
+    done
+    for a in "${!urls[@]}"; do
+      a3=$(printf "%03d" $a)
+      echo "ffmpeg -i \"${urls[$a]}\" -q:v 1 ${n13}${a3}.jpg"
+      ffmpeg -i "${urls[$a]}" -q:v 1 ${n13}${a3}.jpg
+      chmod 600 ${n13}${a3}.jpg
+    done
+  else 
+    n16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
+    echo "ffmpeg -i \"$1\" -q:v 1 ${n16}.jpg"
+    ffmpeg -i "$1" -q:v 1 ${n16}.jpg
+    chmod 600 ${n16}.jpg
+  fi
 fi
 
