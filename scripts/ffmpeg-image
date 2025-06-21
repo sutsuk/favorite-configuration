@@ -8,7 +8,6 @@ if [ $# -ge 1 ]; then
       if [ "$url" != "" ]; then
         urls+=($url)
       fi
-      echo -e "\rurls: ${urls[@]}"
     done
     for a in "${!urls[@]}"; do
       a3=$(printf "%03d" $a)
