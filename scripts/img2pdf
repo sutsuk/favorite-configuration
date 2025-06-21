@@ -14,7 +14,7 @@ if [ $# -ge 1 ]; then
   done
   echo "SRCS: ${SRCS}"
   n16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
-  gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=${n16}.pdf ${SRCS}
+  gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress -dNOPAUSE -dQUIET -dBATCH -sOutputFile=${n16}.pdf ${SRCS}
   chmod 600 $n16.pdf
   if [ ! -d _trash ]; then
     mkdir _trash
