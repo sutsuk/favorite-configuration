@@ -15,5 +15,5 @@ vim /etc/auto.master
 vim /etc/auto.nfs
 ```
 ```
-home -fstype=nfs4,rw,hard,intr nfs-server:/export/home/
+home -fstype=nfs4,rw,hard,intr,proto=tcp,port=2049 nfs-server:/export/home/
 ```
