@@ -11,10 +11,10 @@ if [ $# -ge 1 ]; then
       echo "./mcserver <world_name> <minecraft_version>"
       exit 1
     fi
-    if [ -d "WORLD_${VERSION}" ]; then
-      cp -r "WORLD_${VERSION}" $WORLD
+    if [ -d ${VERSION} ]; then
+      cp -r ${VERSION} $WORLD
     else
-      echo "WORLD_${VERSION} is not found"
+      echo "${VERSION} is not found"
       exit 1
     fi
   fi
