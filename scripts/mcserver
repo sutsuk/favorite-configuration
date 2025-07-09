@@ -1,0 +1,23 @@
+#! /bin/bash
+
+if [ $# -ge 1 ]; then
+  WORLD=$1
+  if [ ! -d $WORLD ]; then
+    if [ $# -ge 2 ]; then
+      VERSION=$2
+    else
+      echo "./mcserver <world_name> <minecraft_version>"
+      exit 1
+    fi
+    if [ -d "WORLD_${VERSION}" ]; then
+      cp -r "WORLD_${VERSION}" $WORLD
+    else
+      echo "WORLD_${VERSION} is not found"
+      exit 1
+    fi
+  fi
+  pushd $WORLD
+  java -Xmx1024M -Xms1024M -jar server.jar nogui
+  popd
+fi
+
