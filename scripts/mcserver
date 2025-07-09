@@ -1,5 +1,7 @@
 #! /bin/bash
 
+echo "server.jar is download from https://mcversions.net/"
+
 if [ $# -ge 1 ]; then
   WORLD=$1
   if [ ! -d $WORLD ]; then
