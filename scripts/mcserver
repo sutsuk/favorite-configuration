@@ -8,7 +8,7 @@ if [ $# -ge 1 ]; then
     if [ $# -ge 2 ]; then
       VERSION=$2
     else
-      echo "./mcserver <world_name> <minecraft_version>"
+      echo "mcserver <world_name> <minecraft_version>"
       exit 1
     fi
     if [ -d ${VERSION} ]; then
