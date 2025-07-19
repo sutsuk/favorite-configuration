@@ -19,7 +19,7 @@ if [ $# -ge 1 ]; then
     fi
   fi
   pushd $WORLD
-  java -Xmx1024M -Xms1024M -jar server.jar nogui
+  java -Xmx8192M -Xms1024M -jar server.jar nogui
   popd
 fi
 
