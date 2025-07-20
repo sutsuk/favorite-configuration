@@ -19,7 +19,7 @@ if [ $# -ge 1 ]; then
     fi
   fi
   pushd $WORLD
-  java -Xmx8192M -Xms1024M -jar server.jar nogui
+  java -Xmx8192M -Xms1024M -jar server.jar nogui | tee "serverlog-$(date +%Y%m%d%H%M%S).log"
   popd
 fi
 
