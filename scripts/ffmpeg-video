@@ -27,10 +27,13 @@ if [ $# -ge 1 ]; then
   if [ $# -ge 4 ] && [ "$4" != "" ]; then 
     conf="${conf} -vf crop=$4"
   fi
+  if [ $# -ge 5 ] && [ "$5" != "" ]; then
+    conf="${conf} -aspect $5"
+  fi
   echo "ffmpeg ${opt} -i \"$1\" ${conf} ${n16}.mp4"
   ffmpeg ${opt} -i "$1" ${conf} ${n16}.mp4
   chmod 600 ${n16}.mp4
 else
-  echo "ffmpeg-video <src> <opt> <conf> <crop>"
+  echo "ffmpeg-video <src> <opt> <conf> <crop> <aspect>"
 fi
 
