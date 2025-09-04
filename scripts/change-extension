@@ -1,12 +1,22 @@
 #! /bin/bash
 
-if [ $# -ge 1 ]; then
-  extension=$1
+if [ $# -ge 2 ]; then
+  old_extension=$1
+  new_extension=$2
   for file in $(ls); do
     if [ -f "${file}" ]; then
       name=$(echo "${file}" | sed 's/\..*//g')
-      echo "mv \"${file}\" \"${name}.${extension}\""
+      original_extension=$(echo "${file}" | sed 's/.*\.//g')
+      if [ "${original_extension}" = "${file}" ]; then
+        original_extension=""
+      fi
+      if [ "${original_extension}" = "${old_extension}" ]; then
+        echo "mv \"${file}\" \"${name}.${new_extension}\""
+        mv "${file}" "${name}.${new_extension}"
+      fi
     fi
   done
+else
+  echo "change-extension <old_extension> <new_extension>"
 fi
 
