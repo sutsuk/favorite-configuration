@@ -1,0 +1,12 @@
+#! /bin/bash
+
+if [ $# -ge 1 ]; then
+  extension=$1
+  for file in $(ls); do
+    if [ -f "${file}" ]; then
+      name=$(echo "${file}" | sed 's/\..*//g')
+      echo "mv \"${file}\" \"${name}.${extension}\""
+    fi
+  done
+fi
+
