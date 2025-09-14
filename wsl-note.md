@@ -19,6 +19,17 @@ hostname -I
 netsh.exe interface portproxy add v4tov4 listenport=25565 listenaddress=* connectport=25565 connectaddress=172.19.53.114
 ```
 
+### 2.3. Confirm Port Forward Setting
+```
+netsh.exe interface portproxy show all
+```
+```
+Listen on ipv4: Connect to ipv4
+Address         Port        Addres         Port
+--------------- ----------  -------------- ----------
+*               25565       172.19.53.114  25565
+```
+
 ## 3. USB Mapping Settings from Windows to WSL
 ### 3.1. Install `usbipd`
 ```
