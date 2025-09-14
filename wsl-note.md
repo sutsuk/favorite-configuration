@@ -11,7 +11,7 @@ sudo mkdir -p /mnt/d && sudo mount -t drvfs D: /mnt/d
 
 ### 2.1. Display WSL Local IP Address (On WSL Linux Console)
 ```
-ip r |tail -n1|cut -d ' ' -f9
+hostname -I
 ```
 
 ### 2.2. Port Forward Setting
