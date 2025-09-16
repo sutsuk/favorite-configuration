@@ -71,7 +71,7 @@ GUID                                  DEVICE
 
 ### 3.4. Attach the USB Device to the WSL
 ```
-usbipd attach --wsl --busid 2-1
+usbipd attach --auto-attach --wsl --busid 2-1
 ```
 ```
 usbipd: info: Using WSL distribution 'Ubuntu-24.04' to attach; the device will be available in all WSL 2 distributions.
