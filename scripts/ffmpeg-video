@@ -32,6 +32,7 @@ if [ $# -ge 1 ]; then
   fi
   echo "ffmpeg ${opt} -i \"$1\" ${conf} ${n16}.mp4"
   ffmpeg ${opt} -i "$1" ${conf} ${n16}.mp4
+  echo "chmod 600 ${n16}.mp4"
   chmod 600 ${n16}.mp4
 else
   echo "ffmpeg-video <src> <opt> <conf> <crop> <aspect>"
