@@ -1,0 +1,9 @@
+Host *
+  ServerAliveInterval 60
+  ServerAliveCountMax 300
+  IdentitiesOnly yes
+  GSSAPIAuthentication no
+Host github
+  Hostname github.com
+  User git
+  IdentityFile ~/.ssh/id_sutsuk_ed25519
