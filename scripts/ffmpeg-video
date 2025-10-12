@@ -10,7 +10,7 @@ if [ $# -ge 1 ]; then
   else
     opt="${opt} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 30"
   fi
-  conf=""
+  conf="-allowed_extensions ALL"
   conf="${conf} -tag:v hvc1 -movflags +faststart"
   conf="${conf} -max_muxing_queue_size 9999"
   conf="${conf} -c:v libx265 -level:v 4.0"
