@@ -2,9 +2,9 @@
 
 if [ $# -ge 1 ]; then
   n16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
-  opt="-allowed_extensions ALL"
-  opt="${opt} -err_detect ignore_err"
+  opt="-err_detect ignore_err"
   opt="${opt} -fflags +discardcorrupt"
+  opt="${opt} -allowed_extensions ALL"
   if [ $# -ge 2 ] && [ "$2" != "" ]; then
     opt="${opt} $2"
   else
