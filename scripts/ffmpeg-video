@@ -4,12 +4,12 @@ if [ $# -ge 1 ]; then
   n16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
   opt="-err_detect ignore_err"
   opt="${opt} -fflags +discardcorrupt"
-  opt="${opt} -allowed_extensions ALL"
   if [ $# -ge 2 ] && [ "$2" != "" ]; then
     opt="${opt} $2"
   else
     opt="${opt} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 30"
   fi
+  opt="${opt} -allowed_extensions ALL"
   conf="-tag:v hvc1 -movflags +faststart"
   conf="${conf} -max_muxing_queue_size 9999"
   conf="${conf} -c:v libx265 -level:v 4.0"
