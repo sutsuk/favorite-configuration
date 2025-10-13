@@ -8,12 +8,13 @@ export PATH="${PATH}:${HOME}/favorite-configuration/scripts/"
 
 alias ll='ls -l'
 alias rr='rm -vrf'
-alias remmina='GDK_BACKEND=x11 remmina'
 alias rm-empty='find ./ -depth -type d -empty -exec rm -v -r {} \;'
-alias bashrc='vim ${HOME}/.bashrc && source ${HOME}/.bashrc'
-alias cputemp='vcgencmd measure_temp'
 alias sd='sudo shutdown now'
+alias re='sudo systemctl reboot'
 alias uefi='sudo systemctl reboot --firmware-setup'
+alias remmina='GDK_BACKEND=x11 remmina'
+alias bashrc='vim ${HOME}/.bashrc && source ${HOME}/.bashrc'
+alias wserv='python3 -m http.server 8080'
 
 if [ $UID -eq 0 ]; then
   PS1="\[\e]0;\u@\h: \w\a\]\[\033[;94m\]┌──${debian_chroot:+($debian_chroot)──}${VIRTUAL_ENV:+(\[\033[0;1m\]$(basename $VIRTUAL_ENV)\[\033[;94m\])}(\[\033[1;31m\]\u@\h\[\033[;94m\])-[\[\033[0;1m\]\w\[\033[;94m\]]\n\[\033[;94m\]└─\[\033[1;31m\]\\$\[\033[0m\] "
