@@ -6,6 +6,8 @@ fi
 
 export PATH="${PATH}:${HOME}/favorite-configuration/scripts/"
 
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/include/opencv4"
+
 alias ll='ls -l'
 alias rr='rm -vrf'
 alias rm-empty='find ./ -depth -type d -empty -exec rm -v -r {} \;'
