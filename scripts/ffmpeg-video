@@ -7,7 +7,9 @@ if [ $# -ge 1 ]; then
   if [ $# -ge 2 ] && [ "$2" != "" ]; then
     opt="${opt} $2"
   else
-    opt="${opt} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 30"
+    opt="${opt} -reconnect 1 -reconnect_streamed 1 -reconnect_at_eof 1 -reconnect_delay_max 30"
+    opt="${opt} -http_persistent 0 -multiple_requests 1 "
+    opt="${opt} -timeout 5000000 -rw_timeout 5000000"
   fi
   conf="-tag:v hvc1 -movflags +faststart"
   conf="${conf} -max_muxing_queue_size 9999"
