@@ -28,7 +28,13 @@ if [ $# -ge 1 ]; then
   conf="${conf} -map 0:v:0 -map_chapters -1 -map -0:s -map_metadata -1"
   conf="${conf} -fflags +bitexact -flags:v +bitexact -flags:a +bitexact"
   if [ $# -ge 5 ] && [ "$5" != "" ]; then
-    conf="${conf} -vf rotate=${5}*PI/180"
+    if [ "$5" = "90" ]; then
+      conf="${conf} -vf transpose=1"
+    elif [ "$5" = "180" ]; then
+      conf="${conf} -vf hflip,vflip"
+    elif [ "$5" = "270" ]; then
+      conf="${conf} -vf transpose=2"
+    fi
   fi
   if [ $# -ge 6 ] && [ "$6" != "" ]; then 
     conf="${conf} -vf crop=$6"
