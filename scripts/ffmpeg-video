@@ -8,7 +8,6 @@ if [ $# -ge 1 ]; then
     opt="${opt} $2"
   else
     opt="${opt} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 30"
-    opt="${opt} -http_persistent 0 -multiple_requests 1 "
     opt="${opt} -rw_timeout 180000000"
   fi
   if [ $# -ge 3 ] && [ "$3" != "" ]; then
