@@ -19,8 +19,6 @@ if [ $# -ge 1 ]; then
   conf="${conf} -b_strategy 2 -bf 2"
   conf="${conf} -flags cgop -coder ac -pix_fmt yuv420p -crf 18"
   if [ $# -ge 4 ] && [ "$4" != "" ]; then
-    conf="${conf} $4"
-  else
     conf="${conf} -fps_mode vfr"
   fi
   conf="${conf} -bufsize 10M"
