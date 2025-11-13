@@ -17,35 +17,40 @@ if [ $# -ge 1 ]; then
   conf="${conf} -max_muxing_queue_size 9999"
   conf="${conf} -c:v libx265 -level:v 4.0"
   conf="${conf} -b_strategy 2 -bf 2"
-  conf="${conf} -flags cgop -coder ac -pix_fmt yuv420p -crf 18 -fps_mode vfr"
-  conf="${conf} -bufsize 10M"
+  conf="${conf} -flags cgop -coder ac -pix_fmt yuv420p -crf 18"
   if [ $# -ge 4 ] && [ "$4" != "" ]; then
     conf="${conf} $4"
+  else
+    conf="${conf} -fps_mode vfr"
+  fi
+  conf="${conf} -bufsize 10M"
+  if [ $# -ge 5 ] && [ "$5" != "" ]; then
+    conf="${conf} $5"
   else
     conf="${conf} -map 0:a:0 -c:a aac -aac_coder twoloop -ac 2 -ar 48000"
   fi
   conf="${conf} -map 0:v:0 -map_chapters -1 -map -0:s -map_metadata -1"
   conf="${conf} -fflags +bitexact -flags:v +bitexact -flags:a +bitexact"
-  if [ $# -ge 5 ] && [ "$5" != "" ]; then
-    if [ "$5" = "90" ]; then
+  if [ $# -ge 6 ] && [ "$6" != "" ]; then
+    if [ "$6" = "90" ]; then
       conf="${conf} -vf transpose=1"
-    elif [ "$5" = "180" ]; then
+    elif [ "$6" = "180" ]; then
       conf="${conf} -vf hflip,vflip"
-    elif [ "$5" = "270" ]; then
+    elif [ "$6" = "270" ]; then
       conf="${conf} -vf transpose=2"
     fi
   fi
-  if [ $# -ge 6 ] && [ "$6" != "" ]; then 
-    conf="${conf} -vf crop=$6"
+  if [ $# -ge 7 ] && [ "$7" != "" ]; then 
+    conf="${conf} -vf crop=$7"
   fi
-  if [ $# -ge 7 ] && [ "$7" != "" ]; then
-    conf="${conf} -aspect $7"
+  if [ $# -ge 8 ] && [ "$8" != "" ]; then
+    conf="${conf} -aspect $8"
   fi
   echo "ffmpeg ${opt} -i \"$1\" ${conf} ${n16}.mp4"
   ffmpeg ${opt} -i "$1" ${conf} ${n16}.mp4
   echo "chmod 600 ${n16}.mp4"
   chmod 600 ${n16}.mp4
 else
-  echo "ffmpeg-video <src> <opt> <time> <conf> <rotate> <crop> <aspect>"
+  echo "ffmpeg-video <src> <opt> <time> <vfr> <audio> <rotate> <crop> <aspect>"
 fi
 
