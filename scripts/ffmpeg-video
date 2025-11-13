@@ -17,7 +17,7 @@ if [ $# -ge 1 ]; then
   conf="${conf} -max_muxing_queue_size 9999"
   conf="${conf} -c:v libx265 -level:v 4.0"
   conf="${conf} -b_strategy 2 -bf 2"
-  conf="${conf} -flags cgop -coder ac -pix_fmt yuv420p -crf 18"
+  conf="${conf} -flags cgop -coder ac -pix_fmt yuv420p -crf 18 -fps_mode vfr"
   conf="${conf} -bufsize 10M"
   if [ $# -ge 4 ] && [ "$4" != "" ]; then
     conf="${conf} $4"
