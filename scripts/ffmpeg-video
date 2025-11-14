@@ -21,7 +21,7 @@ _BASH_COMPLETION_FFMPEG_VIDEO() {
   fi
 }
 
-while getopts "-:" OPT; do
+while getopts ":-:" OPT; do
   OPT="-${OPT}${OPTARG}"
   OPTARG="${!OPTIND}"
   if [ "${OPT}" = "--bash-completion" ]; then
@@ -29,22 +29,28 @@ while getopts "-:" OPT; do
     exit 0
   elif [ "${OPT}" = "--input-file" ]; then
     INPUT_PATH="${OPTARG}"
+    shift
   elif [ "${OPT}" = "--no-reconnect" ]; then
     RECONNECT=FALSE
   elif [ "${OPT}" = "--start" ]; then
     START_TIME="${OPTARG}"
+    shift
   elif [ "${OPT}" = "--end" ]; then
     END_TIME="${OPTARG}"
+    shift
   elif [ "${OPT}" = "--variable-frame-rate" ]; then
     VARIABLE_FRAME_RATE=TRUE
   elif [ "${OPT}" = "--no-audio" ]; then
     AUDIO=FALSE
   elif [ "${OPT}" = "--rotate" ]; then
     ROTATE="${OPTARG}"
+    shift
   elif [ "${OPT}" = "--crop" ]; then
     CROP="${OPTARG}"
+    shift
   elif [ "${OPT}" = "--aspect" ]; then
     ASPECT="${OPTARG}"
+    shift
   else
     echo "Undefined option: ${OPT} ${OPTARG}"
     exit 1
