@@ -48,7 +48,7 @@ while getopts ":-:" OPT; do
 done
 
 if [ "${M3U8}" = "TRUE" ]; then
-  curl ${INPUT_FILE} | strings | tee download.m3u8
+  curl ${INPUT_FILE} | strings > download.m3u8
   for e in jpeg jpg mp4 png; do
     cat download.m3u8 | sed "s/\.${e}$/\.ts/" > fixed.m3u8
     mv fixed.m3u8 download.m3u8
