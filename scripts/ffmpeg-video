@@ -104,4 +104,5 @@ if [ "${INPUT_FILE}" != "" ]; then
   ffmpeg ${FFMPEG_INPUT_OPT} -i "${INPUT_FILE}" ${FFMPEG_OUTPUT_OPT} ${N16}.mp4
   echo "chmod 600 ${N16}.mp4"
   chmod 600 ${N16}.mp4
+  rm -rfv download.m3u8
 fi
