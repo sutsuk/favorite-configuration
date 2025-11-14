@@ -8,3 +8,4 @@ function _BASH_COMPLETION_FFMPEG_VIDEO() {
   COMPREPLY=($(compgen -W '--input-file --no-reconnect --start --end --variable-frame-rate --no-audio --rotate --crop --aspect' -- "$cur"))
 }
 complete -F _BASH_COMPLETION_FFMPEG_VIDEO ffmpeg-video
+complete -F _BASH_COMPLETION_FFMPEG_VIDEO ffv
