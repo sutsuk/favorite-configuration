@@ -31,5 +31,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
+if [ -f ${HOME}/favorite-configuration/scripts/bash-set-completion ]; then
+  . ${HOME}/favorite-configuration/scripts/bash-set-completion
+fi
+
 echo "" > $HOME/.bash_history
 echo "" > $HOME/.history
