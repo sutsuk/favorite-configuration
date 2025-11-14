@@ -23,6 +23,7 @@ _BASH_COMPLETION_FFMPEG_VIDEO() {
 
 while getopts :-: OPT; do
   if [ "-${OPT}" = "--bash-completion" ]; then
+    complete -F _BASH_COMPLETION_FFMPEG_VIDEO ffmpeg-video
     exit 0
   elif [ "-${OPT}" = "--input-file" ]; then
     INPUT_PATH="${OPTARG}"
