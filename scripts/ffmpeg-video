@@ -11,23 +11,10 @@ ROTATE="0"
 CROP=""
 ASPECT=""
 
-function _BASH_COMPLETION_FFMPEG_VIDEO() {
-  local cur prev words cword split
-  _init_completion || return
-  local defaultIFS=$' \t\n'
-  local IFS=$defaultIFS
-  if [ "${cword}" = "1" ]; then
-    COMPREPLY=($(compgen -W '--input-file --no-reconnect --start --end --variable-frame-rate --no-audio --rotate --crop --aspect' -- "$cur"))
-  fi
-}
-
 while getopts ":-:" OPT; do
   OPT="-${OPT}${OPTARG}"
   OPTARG="${!OPTIND}"
-  if [ "${OPT}" = "--bash-completion" ]; then
-    complete -F _BASH_COMPLETION_FFMPEG_VIDEO ffmpeg-video
-    exit 0
-  elif [ "${OPT}" = "--input-file" ]; then
+  if [ "${OPT}" = "--input-file" ]; then
     INPUT_PATH="${OPTARG}"
     shift
   elif [ "${OPT}" = "--no-reconnect" ]; then
