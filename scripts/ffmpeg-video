@@ -1,6 +1,7 @@
 #! /bin/bash
 
-INPUT_PATH=""
+INPUT_FILE=""
+M3U8=FALSE
 N16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
 RECONNECT=TRUE
 START_TIME=""
@@ -15,8 +16,10 @@ while getopts ":-:" OPT; do
   OPT="-${OPT}${OPTARG}"
   OPTARG="${!OPTIND}"
   if [ "${OPT}" = "--input-file" ]; then
-    INPUT_PATH="${OPTARG}"
+    INPUT_FILE="${OPTARG}"
     shift
+  elif [ "${OPT}" = "--m3u8" ]; then
+    M3U8=TRUE
   elif [ "${OPT}" = "--no-reconnect" ]; then
     RECONNECT=FALSE
   elif [ "${OPT}" = "--start" ]; then
@@ -43,6 +46,16 @@ while getopts ":-:" OPT; do
     exit 1
   fi
 done
+
+if [ "${M3U8}" = "TRUE" ]; then
+  curl ${INPUT_FILE} | strings | tee download.m3u8
+  for e in "jpeg jpg png mp4"; do
+    cat download.m3u8 | sed "s/\.${e}$/\.ts/" | tee fixed.m3u8
+    mv fixed.m3u8 download.m3u8
+  done
+  INPUT_FILE=download.m3u8
+  RECONNECT=FALSE
+fi
 
 FFMPEG_INPUT_OPT="-err_detect ignore_err"
 FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -fflags +discardcorrupt"
@@ -85,7 +98,7 @@ fi
 if [ "${ASPECT}" != "" ]; then
   FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -aspect ${ASPECT}"
 fi
-if [ "${INPUT_PATH}" != "" ]; then
-  echo "ffmpeg ${FFMPEG_INPUT_OPT} -i \"${INPUT_PATH}\" ${FFMPEG_OUTPUT_OPT} ${N16}.mp4"
+if [ "${INPUT_FILE}" != "" ]; then
+  echo "ffmpeg ${FFMPEG_INPUT_OPT} -i \"${INPUT_FILE}\" ${FFMPEG_OUTPUT_OPT} ${N16}.mp4"
   echo "chmod 600 ${N16}.mp4"
 fi
