@@ -31,9 +31,5 @@ if ! shopt -oq posix; then
   fi
 fi
 
-if [ -f ${HOME}/favorite-configuration/scripts/ffmpeg-video ]; then
-  ${HOME}/favorite-configuration/scripts/ffmpeg-video --bash-completion
-fi
-
 echo "" > $HOME/.bash_history
 echo "" > $HOME/.history
