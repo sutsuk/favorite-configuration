@@ -11,7 +11,7 @@ ROTATE="0"
 CROP=""
 ASPECT=""
 
-_BASH_COMPLETION_FFMPEG_VIDEO() {
+function _BASH_COMPLETION_FFMPEG_VIDEO() {
   local cur prev words cword split
   _init_completion || return
   local defaultIFS=$' \t\n'
