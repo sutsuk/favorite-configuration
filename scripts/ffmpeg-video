@@ -1,54 +1,83 @@
 #! /bin/bash
 
-if [ $# -ge 1 ]; then
-  n16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
-  opt="-err_detect ignore_err"
-  opt="${opt} -fflags +discardcorrupt"
-  if [ $# -ge 2 ] && [ "$2" != "" ]; then
-    opt="${opt} $2"
-  else
-    opt="${opt} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 30"
-    opt="${opt} -rw_timeout 180000000"
-  fi
-  if [ $# -ge 3 ] && [ "$3" != "" ]; then
-    opt="${opt} $3"
-  fi
-  conf="-tag:v hvc1 -movflags +faststart"
-  conf="${conf} -max_muxing_queue_size 9999"
-  conf="${conf} -c:v libx265 -level:v 4.0"
-  conf="${conf} -b_strategy 2 -bf 2"
-  conf="${conf} -flags cgop -coder ac -pix_fmt yuv420p -crf 18"
-  if [ $# -ge 4 ] && [ "$4" != "" ]; then
-    conf="${conf} -fps_mode vfr"
-  fi
-  conf="${conf} -bufsize 10M"
-  if [ $# -ge 5 ] && [ "$5" != "" ]; then
-    conf="${conf} $5"
-  else
-    conf="${conf} -map 0:a:0 -c:a aac -aac_coder twoloop -ac 2 -ar 48000"
-  fi
-  conf="${conf} -map 0:v:0 -map_chapters -1 -map -0:s -map_metadata -1"
-  conf="${conf} -fflags +bitexact -flags:v +bitexact -flags:a +bitexact"
-  if [ $# -ge 6 ] && [ "$6" != "" ]; then
-    if [ "$6" = "90" ]; then
-      conf="${conf} -vf transpose=1"
-    elif [ "$6" = "180" ]; then
-      conf="${conf} -vf hflip,vflip"
-    elif [ "$6" = "270" ]; then
-      conf="${conf} -vf transpose=2"
-    fi
-  fi
-  if [ $# -ge 7 ] && [ "$7" != "" ]; then 
-    conf="${conf} -vf crop=$7"
-  fi
-  if [ $# -ge 8 ] && [ "$8" != "" ]; then
-    conf="${conf} -aspect $8"
-  fi
-  echo "ffmpeg ${opt} -i \"$1\" ${conf} ${n16}.mp4"
-  ffmpeg ${opt} -i "$1" ${conf} ${n16}.mp4
-  echo "chmod 600 ${n16}.mp4"
-  chmod 600 ${n16}.mp4
-else
-  echo "ffmpeg-video <src> <opt> <time> <vfr> <audio> <rotate> <crop> <aspect>"
-fi
+INPUT_PATH=""
+N16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
+RECONNECT=TRUE
+START_TIME=""
+END_TIME=""
+VARIABLE_FRAME_RATE=FALSE
+AUDIO=TRUE
+ROTATE="0"
+CROP=""
+ASPECT=""
 
+while getopts :-: OPT; do
+  if [ "-${OPT}" = "--input-file" ];
+    INPUT_PATH="${OPTARG}"
+  elif [ "-${OPT}" = "--no-reconnect" ]; then
+    RECONNECT=FALSE
+  elif [ "-${OPT}" = "--start" ]; then
+    START_TIME="${OPTARG}"
+  elif [ "-${OPT}" = "--end" ]; then
+    END_TIME="${OPTARG}"
+  elif [ "-${OPT}" = "--variable-frame-rate" ]; then
+    VARIABLE_FRAME_RATE=TRUE
+  elif [ "-${OPT}" = "--no-audio" ]; then
+    AUDIO=FALSE
+  elif [ "-${OPT}" = "--rotate" ]; then
+    ROTATE="${OPTARG}"
+  elif [ "-${OPT}" = "--crop" ]; then
+    CROP="${OPTARG}"
+  elif [ "-${OPT}" = "--aspect" ]; then
+    ASPECT="${OPTARG}"
+  else
+    echo "Undefined option: -${OPT} ${OPTARG}"
+    exit 1
+  fi
+done
+
+FFMPEG_INPUT_OPT="-err_detect ignore_err"
+FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -fflags +discardcorrupt"
+if [ "${RECONNECT}" = "TRUE" ]; then
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 30"
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -rw_timeout 180000000"
+fi
+if [ "${START_TIME}" != "" ]; then
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -ss ${START_TIME}"
+fi
+if [ "${END_TIME}" != "" ]; then
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -to ${END_TIME}"
+fi
+FFMPEG_OUTPUT_OPT="-tag:v hvc1 -movflags +faststart"
+FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -max_muxing_queue_size 9999"
+FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -c:v libx265 -level:v 4.0"
+FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -b_strategy 2 -bf 2"
+FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -flags cgop -coder ac -pix_fmt yuv420p -crf 18"
+if [ "${VARIABLE_FRAME_RATE}" = "TRUE" ]; then
+  FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -fps_mode vfr"
+fi
+FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -bufsize 100M"
+if [ "${AUDIO}" = "TRUE" ]; then
+  FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -map 0:a:0 -c:a aac -aac_coder twoloop -ac 2 -ar 48000"
+fi
+FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -map 0:v:0 -map_chapters -1 -map -0:s -map_metadata -1"
+FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -fflags +bitexact -flags:v +bitexact -flags:a +bitexact"
+if [ "${ROTATE}" != "" ] && [ "$ROTATE" != "0" ]; then
+  if [ "${ROTATE}" = "90" ]; then
+    FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -vf transpose=1"
+  elif [ "${ROTATE}" = "180" ]; then
+    FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -vf hflip,vflip"
+  elif [ "${ROTATE}" = "270" ]; then
+    FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -vf transpose=2"
+  fi
+fi
+if [ "${CROP}" != "" ]; then
+  FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -vf crop=${CROP}"
+fi
+if [ "${ASPECT}" != "" ]; then
+  FFMPEG_OUTPUT_OPT="${FFMPEG_OUTPUT_OPT} -aspect ${ASPECT}"
+fi
+if [ "${INPUT_PATH}" != "" ]; then
+  echo "ffmpeg ${FFMPEG_INPUT_OPT} -i \"${INPUT_PATH}\" ${FFMPEG_OUTPUT_OPT} ${N16}.mp4"
+  echo "chmod 600 ${N16}.mp4"
+fi
