@@ -23,7 +23,7 @@ _BASH_COMPLETION_FFMPEG_VIDEO() {
 
 while getopts ":-:" OPT; do
   OPT="${OPT}${OPTARG}"
-  OPTARG="${OPTIND}"
+  OPTARG="${!OPTIND}"
   echo $OPT
   echo $OPTARG
   if [ "-${OPT}" = "--bash-completion" ]; then
