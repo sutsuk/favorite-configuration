@@ -12,7 +12,7 @@ CROP=""
 ASPECT=""
 
 while getopts :-: OPT; do
-  if [ "-${OPT}" = "--input-file" ];
+  if [ "-${OPT}" = "--input-file" ]; then
     INPUT_PATH="${OPTARG}"
   elif [ "-${OPT}" = "--no-reconnect" ]; then
     RECONNECT=FALSE
