@@ -2,6 +2,7 @@
 
 INPUT_FILE=""
 M3U8=FALSE
+DOWNLOAD_INDEX=0
 N16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
 RECONNECT=TRUE
 START_TIME=""
@@ -49,12 +50,13 @@ done
 
 if [ "${M3U8}" = "TRUE" ]; then
   INPUT_FILE_DIR="$(dirname ${INPUT_FILE})/"
-  curl ${INPUT_FILE} | strings > download.m3u8
+  DOWNLOAD_INDEX=$(ls download*.m3u8 2>/dev/null | wc -l)
+  curl ${INPUT_FILE} | strings > download${DOWNLOAD_INDEX}.m3u8
   for e in jpeg jpg mp4 png; do
-    cat download.m3u8 | sed -r "s/\.${e}$/\.ts/;s/^(()|(#.*)|(https?:\/\/.*))$/\1/;t;s/^/${INPUT_FILE_DIR//\//\\/}/" > fixed.m3u8
-    mv fixed.m3u8 download.m3u8
+    cat download${DOWNLOAD_INDEX}.m3u8 | sed -r "s/\.${e}$/\.ts/;s/^(()|(#.*)|(https?:\/\/.*))$/\1/;t;s/^/${INPUT_FILE_DIR//\//\\/}/" > fixed.m3u8
+    mv fixed.m3u8 download${DOWNLOAD_INDEX}.m3u8
   done
-  INPUT_FILE=download.m3u8
+  INPUT_FILE=download${DOWNLOAD_INDEX}.m3u8
   RECONNECT=FALSE
 fi
 
@@ -105,5 +107,8 @@ if [ "${INPUT_FILE}" != "" ]; then
   ffmpeg ${FFMPEG_INPUT_OPT} -i "${INPUT_FILE}" ${FFMPEG_OUTPUT_OPT} ${N16}.mp4
   echo "chmod 600 ${N16}.mp4"
   chmod 600 ${N16}.mp4
-  rm -rfv download.m3u8
+fi
+
+if [ "${M3U8}" = "TRUE" ]; then
+  rm -rfv download${DOWNLOAD_INDEX}.m3u8
 fi
