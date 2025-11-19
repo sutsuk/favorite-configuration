@@ -64,9 +64,10 @@ FFMPEG_INPUT_OPT="-err_detect ignore_err"
 FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -fflags +discardcorrupt"
 FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -protocol_whitelist crypto,data,file,https,tcp,tls"
 if [ "${RECONNECT}" = "TRUE" ]; then
-  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 30 -max_reload 100"
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 10 -reconnect_max_retries 100"
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -multiple_requests 1 -max_reload 100"
 fi
-FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -rw_timeout 180000000"
+FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -rw_timeout 10000000"
 if [ "${START_TIME}" != "" ]; then
   FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -ss ${START_TIME}"
 fi
