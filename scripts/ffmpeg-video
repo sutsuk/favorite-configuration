@@ -64,8 +64,8 @@ FFMPEG_INPUT_OPT="-err_detect ignore_err"
 FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -fflags +discardcorrupt"
 FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -protocol_whitelist crypto,data,file,https,tcp,tls"
 if [ "${RECONNECT}" = "TRUE" ]; then
-  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 12"
-  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -multiple_requests 1 -max_reload 10"
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -reconnect 1 -reconnect_streamed 1 -reconnect_at_eof 1 -reconnect_delay_max 12"
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -multiple_requests 1 -seg_max_retry 12 -max_reload 12"
   HOST_NAME=$(sed -r "s/^(https?:\/\/)//;s/(\/.*)$//g")
   FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} --headers \"Host: {HOST_NAME}\""
 fi
