@@ -1,6 +1,7 @@
 #! /bin/bash
 
 INPUT_FILE=""
+HEADERS=""
 M3U8=FALSE
 DOWNLOAD_INDEX=0
 N16=$(cat /dev/urandom | tr -dc '1-9' | head -c16)
@@ -67,9 +68,7 @@ if [ "${RECONNECT}" = "TRUE" ]; then
   FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 12"
   FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -multiple_requests 1 -seg_max_retry 12 -max_reload 12"
   REFERER=$(echo "${INPUT_FILE}" | grep -oE "^(https?://[^/]+/)")
-  set -x
-  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -headers $'Referer: ${REFERER}\r\n'"
-  set +x
+  HEADERS="-headers \$'Referer: ${REFERER}\\r\\n'"
 fi
 FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -rw_timeout 10000000"
 if [ "${START_TIME}" != "" ]; then
@@ -109,9 +108,8 @@ if [ "${ASPECT}" != "" ]; then
 fi
 if [ "${INPUT_FILE}" != "" ]; then
   set -x
-  ffmpeg ${FFMPEG_INPUT_OPT} -i "${INPUT_FILE}" ${FFMPEG_OUTPUT_OPT} ${N16}.mp4
+  ffmpeg ${FFMPEG_INPUT_OPT} $(echo ${HEADERS}) -i "${INPUT_FILE}" ${FFMPEG_OUTPUT_OPT} ${N16}.mp4
   chmod 600 ${N16}.mp4
-  set +x
 fi
 
 if [ "${M3U8}" = "TRUE" ]; then
