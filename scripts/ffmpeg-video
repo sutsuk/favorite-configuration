@@ -61,7 +61,7 @@ if [ "${M3U8}" = "TRUE" ]; then
   RECONNECT=FALSE
 fi
 
-FFMPEG_INPUT_OPT="-err_detect ignore_err"
+FFMPEG_INPUT_OPT="-loglevel error -err_detect ignore_err"
 FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -fflags +discardcorrupt"
 FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -protocol_whitelist crypto,data,file,https,tcp,tls"
 if [ "${RECONNECT}" = "TRUE" ]; then
