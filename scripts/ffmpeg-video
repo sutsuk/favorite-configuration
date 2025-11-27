@@ -66,9 +66,11 @@ FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -fflags +discardcorrupt"
 FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -protocol_whitelist crypto,data,file,https,tcp,tls"
 if [ "${RECONNECT}" = "TRUE" ]; then
   FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 12"
-  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -multiple_requests 1 -seg_max_retry 12 -max_reload 12"
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -multiple_requests 1"
 fi
-FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -rw_timeout 10000000"
+if [ "${M3U8}" = "TRUE" ]; then
+  FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -seg_max_retry 12 -max_reload 12 -rw_timeout 10000000"
+fi
 if [ "${START_TIME}" != "" ]; then
   FFMPEG_INPUT_OPT="${FFMPEG_INPUT_OPT} -ss ${START_TIME}"
 fi
