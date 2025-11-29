@@ -17,6 +17,7 @@ alias uefi='sudo systemctl reboot --firmware-setup'
 alias remmina='GDK_BACKEND=x11 remmina'
 alias bashrc='vim ${HOME}/.bashrc && source ${HOME}/.bashrc'
 alias ssh-add='ssh-add ${HOME}/.ssh/id_sutsuk_ed25519'
+alias ssh-keychain='/usr/bin/keychain -q --nogui ${HOME}/.ssh/id_sutsuk_ed25519 && source ${HOME}/.keychain/${HOSTNAME}-sh'
 alias wserv='python3 -m http.server 8080'
 
 if [ $UID -eq 0 ]; then
