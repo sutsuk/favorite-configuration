@@ -52,6 +52,7 @@ done
 if [ "${M3U8}" = "TRUE" ]; then
   INPUT_FILE_DIR="$(dirname ${INPUT_FILE})/"
   DOWNLOAD_INDEX=$(ls download*.m3u8 2>/dev/null | wc -l)
+  echo "curl ${INPUT_FILE} | strings"
   curl ${INPUT_FILE} | strings > download${DOWNLOAD_INDEX}.m3u8
   for e in jpeg jpg mp4 png; do
     cat download${DOWNLOAD_INDEX}.m3u8 | sed -r "s/\.${e}$/\.ts/;s/^(()|(#.*)|(https?:\/\/.*))$/\1/;t;s/^/${INPUT_FILE_DIR//\//\\/}/" > fixed.m3u8
